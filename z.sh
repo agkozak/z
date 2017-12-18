@@ -37,6 +37,13 @@ _z() {
     # bail if we don't own ~/.z and $_Z_OWNER not set
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
+    awk() {
+      case $(uname -a) in
+        SunOS*) nawk "$@" ;;
+        *) command awk "$@" ;;
+      esac
+    }
+
     _z_dirs () {
         while read line; do
             # only count directories

@@ -23,6 +23,10 @@
 #     * z -l foo  # list matches instead of cd
 #     * z -c foo  # restrict matches to subdirs of $PWD
 
+case $(uname -a) in
+  SunOS*) awk() { nawk "$@"; } ;;
+esac
+
 [ -d "${_Z_DATA:-$HOME/.z}" ] && {
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
 }
@@ -36,13 +40,6 @@ _z() {
 
     # bail if we don't own ~/.z and $_Z_OWNER not set
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
-
-    awk() {
-      case $(uname -a) in
-        SunOS*) nawk "$@" ;;
-        *) command awk "$@" ;;
-      esac
-    }
 
     _z_dirs () {
         while read line; do

@@ -23,11 +23,6 @@
 #     * z -l foo  # list matches instead of cd
 #     * z -c foo  # restrict matches to subdirs of $PWD
 
-case $(uname -a) in
-  SunOS*) _z_awk() { command nawk "$@"; } ;;
-  *) _z_awk() { command awk "$@"; } ;;
-esac
-
 [ -d "${_Z_DATA:-$HOME/.z}" ] && {
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
 }
@@ -65,7 +60,7 @@ _z() {
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
-        _z_awk < <(_z_dirs 2>/dev/null) -v path="$*" -v now="$(date +%s)" -F"|" '
+        awk < <(_z_dirs 2>/dev/null) -v path="$*" -v now="$(date +%s)" -F"|" '
             BEGIN {
                 rank[path] = 1
                 time[path] = now
@@ -100,7 +95,7 @@ _z() {
     elif [ "$1" = "--complete" -a -s "$datafile" ]; then
         while read line; do
             [ -d "${line%%\|*}" ] && echo $line
-        done < "$datafile" | _z_awk -v q="$2" -F"|" '
+        done < "$datafile" | awk -v q="$2" -F"|" '
             BEGIN {
                 if( q == tolower(q) ) imatch = 1
                 q = substr(q, 3)
@@ -140,7 +135,7 @@ _z() {
         [ -f "$datafile" ] || return
 
         local cd
-        cd="$( < <( _z_dirs ) _z_awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+        cd="$( < <( _z_dirs ) awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
             function frecent(rank, time) {
                 # relate frequency and time
                 dx = t - time

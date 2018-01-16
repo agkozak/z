@@ -66,7 +66,7 @@ _z() {
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
-        awk < <(_z_dirs 2>/dev/null) -v path="$*" -v now="$(date +%s)" -F"|" '
+        _z_dirs 2>/dev/null | awk -v path="$*" -v now="$(date +%s)" -F"|" '
             BEGIN {
                 rank[path] = 1
                 time[path] = now
@@ -141,7 +141,7 @@ _z() {
         [ -f "$datafile" ] || return
 
         local cd
-        cd="$( < <( _z_dirs ) awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+        cd="$( _z_dirs | awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
             function frecent(rank, time) {
                 # relate frequency and time
                 dx = t - time

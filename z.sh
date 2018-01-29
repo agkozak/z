@@ -237,7 +237,8 @@ if type compctl >/dev/null 2>&1; then
                 (_z --add "${PWD:A}" &)
             }
         fi
-      chpwd_functions+=(_z_chpwd) 
+        autoload -Uz add-zsh-hook
+        add-zsh-hook -Uz chpwd _z_chpwd
     }
     _z_zsh_tab_completion() {
         # tab completion

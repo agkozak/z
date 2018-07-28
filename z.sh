@@ -126,7 +126,12 @@ _z() {
                     l) local list=1;;
                     r) local typ="rank";;
                     t) local typ="recent";;
-                    x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
+                    x)
+                      local tempfile="$datafile.$RANDOM"
+                      sed -e "\:^${PWD}|.*:d" "$datafile" > "$tempfile"
+                      env mv -f "$tempfile" "$datafile" 2> /dev/null \
+                        || env rm -f "$tempfile"
+                      ;;
                 esac; opt=${opt:1}; done;;
              *) local fnd="$fnd${fnd:+ }$1";;
         esac; local last=$1; [ "$#" -gt 0 ] && shift; done

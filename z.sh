@@ -120,7 +120,7 @@ _z() {
         # list/go
         while [ "$1" ]; do case "$1" in
             --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
-            -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
+            -?) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) local fnd="^$PWD $fnd";;
                     e) local echo=1;;
                     h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;

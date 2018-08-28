@@ -29,11 +29,11 @@
 }
 
 _z_pick_awk_flavor() {
-  if [ -z "$_Z_AWK" ]; then
-    local awk; for awk in mawk gawk original-awk nawk awk; do
-      command -v $awk > /dev/null 2>&1 && _Z_AWK=$awk && break
-    done
-  fi
+    if [ -z "$_Z_AWK" ]; then
+        local awk; for awk in mawk gawk original-awk nawk awk; do
+            command -v $awk > /dev/null 2>&1 && _Z_AWK=$awk && break
+        done
+    fi
 }
 
 _z() {

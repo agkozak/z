@@ -95,10 +95,10 @@ _z() {
         ' 2>/dev/null >| "$tempfile"
         # do our best to avoid clobbering the datafile in a race condition.
         if [ $? -ne 0 -a -f "$datafile" ]; then
-            env rm -f "$tempfile"
+            command rm -f "$tempfile"
         else
             [ "$_Z_OWNER" ] && chown $_Z_OWNER:"$(id -ng $_Z_OWNER)" "$tempfile"
-            env mv -f "$tempfile" "$datafile" 2> /dev/null || env rm -f "$tempfile"
+            command mv -f "$tempfile" "$datafile" 2> /dev/null || command rm -f "$tempfile"
         fi
 
     # tab completion
@@ -131,8 +131,8 @@ _z() {
                     x)
                       local tempfile="$datafile.$RANDOM"
                       sed -e "\:^${PWD}|.*:d" "$datafile" > "$tempfile"
-                      env mv -f "$tempfile" "$datafile" 2> /dev/null \
-                        || env rm -f "$tempfile"
+                      command mv -f "$tempfile" "$datafile" 2> /dev/null \
+                        || command rm -f "$tempfile"
                       ;;
                 esac; opt=${opt:1}; done;;
              *) fnd="$fnd${fnd:+ }$1";;

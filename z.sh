@@ -234,18 +234,19 @@ alias ${_Z_CMD:-z}='_z 2>&1'
 if type compctl >/dev/null 2>&1; then
     # zsh
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
-        # populate directory list, avoid clobbering any other chpwd_functions.
+        # populate directory list, avoid clobbering any other precmds.
         if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
-            _z_chpwd() {
+            _z_precmd() {
                 (_z --add "${PWD:a}" &)
             }
         else
-            _z_chpwd() {
+            _z_precmd() {
                 (_z --add "${PWD:A}" &)
             }
         fi
-        autoload -Uz add-zsh-hook
-        add-zsh-hook -Uz chpwd _z_chpwd
+        [[ -n "${precmd_functions[(r)_z_precmd]}" ]] || {
+            precmd_functions[$(($#precmd_functions+1))]=_z_precmd
+        }
     }
     _z_zsh_tab_completion() {
         # tab completion
